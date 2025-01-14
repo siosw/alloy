@@ -79,6 +79,9 @@ alloy-trie = { version = "0.7.6", default-features = false }
 
 alloy-chains = { version = "0.1.18", default-features = false }
 
+# TODO: change to real dependency once merged
+reth-ethereum-forks = { git = "https://github.com/mvares/hardforks", branch = "feat/extract-ethereum-forks" }
+
 # eips
 alloy-eip2124 = { version = "0.1.0", default-features = false }
 alloy-eip2930 = { version = "0.1.0", default-features = false }

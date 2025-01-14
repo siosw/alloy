@@ -2,6 +2,7 @@
 
 use alloy_primitives::{hex, Address, ChainId};
 use k256::{ecdsa::SigningKey, SecretKey as K256SecretKey};
+use reth_ethereum_forks::{EthereumHardfork, EthereumHardforks};
 use std::{
     ffi::OsString,
     io::{BufRead, BufReader},
@@ -124,6 +125,7 @@ pub struct Anvil {
     mnemonic: Option<String>,
     fork: Option<String>,
     fork_block_number: Option<u64>,
+    hardfork: Option<EthereumHardfork>,
     args: Vec<OsString>,
     timeout: Option<u64>,
 }
@@ -219,6 +221,13 @@ impl Anvil {
         self
     }
 
+    /// Sets the `hardfork` argument.
+    /// TODO: better docs
+    pub fn hardfork<T: Into<EthereumHardfork>>(mut self, hardfork: T) -> Self {
+        self.hardfork = Some(hardfork.into());
+        self
+    }
+
     /// Adds an argument to pass to the `anvil`.
     pub fn arg<T: Into<OsString>>(mut self, arg: T) -> Self {
         self.args.push(arg.into());
@@ -278,6 +287,10 @@ impl Anvil {
 
         if let Some(fork_block_number) = self.fork_block_number {
             cmd.arg("--fork-block-number").arg(fork_block_number.to_string());
+        }
+
+        if let Some(hardfork) = self.hardfork {
+            cmd.arg("--hardfork").arg(hardfork.to_string());
         }
 
         cmd.args(self.args);
