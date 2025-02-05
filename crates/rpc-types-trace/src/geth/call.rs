@@ -157,4 +157,18 @@ mod tests {
         let _trace: CallFrame = serde_json::from_str(ONLY_TOP_CALL).unwrap();
         let _trace: CallFrame = serde_json::from_str(WITH_LOG).unwrap();
     }
+
+    #[test]
+    fn test_deeply_nested_call_trace() {
+        let mut calls = vec![CallFrame::default(); 100];
+
+        let mut trace = calls.pop().unwrap();
+        for mut new in calls {
+            new.calls.push(trace.clone());
+            trace = new;
+        }
+
+        let str = serde_json::to_string(&trace).unwrap();
+        assert_eq!(trace, serde_json::from_str(&str).unwrap());
+    }
 }
