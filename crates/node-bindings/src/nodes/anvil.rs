@@ -221,7 +221,8 @@ impl Anvil {
         self
     }
 
-    /// Sets the `hardfork` argument.
+    /// Sets the EVM `hardfork` that will be used by the `anvil` instance.
+    ///
     /// TODO: better docs
     pub fn hardfork<T: Into<EthereumHardfork>>(mut self, hardfork: T) -> Self {
         self.hardfork = Some(hardfork.into());
